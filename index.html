@@ -43,6 +43,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
+    <!-- Debug Panel -->
+    <div style="position: fixed; top: 10px; right: 10px; background: #000; color: #0f0; padding: 15px; border-radius: 5px; max-width: 300px; max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 11px; z-index: 9999;">
+        <div style="color: #fff; font-weight: bold; margin-bottom: 10px;">DataLayer Events:</div>
+        <div id="debugLog"></div>
+    </div>
+
     <div class="container">
         <h1>Registration Form</h1>
         <form id="registrationForm" onsubmit="handleSubmit(event)">
@@ -111,6 +117,193 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             }
             alert('Form submitted successfully!');
         }
+    </script>
+
+    <!-- Measuremate Form Tracking Script -->
+    <script>
+(function() {
+  'use strict';
+  
+  window.dataLayer = window.dataLayer || [];
+  var formStartedTracker = new Set();
+  
+  // Debug logger
+  function logToDebug(eventName, detail) {
+    var debugLog = document.getElementById('debugLog');
+    if (debugLog) {
+      var time = new Date().toLocaleTimeString();
+      var entry = document.createElement('div');
+      entry.style.marginBottom = '5px';
+      entry.innerHTML = '<span style="color: #0ff;">' + time + '</span> - <span style="color: #ff0;">' + eventName + '</span>: ' + detail;
+      debugLog.insertBefore(entry, debugLog.firstChild);
+    }
+  }
+  
+  function getFieldType(element) {
+    var tagName = element.tagName.toLowerCase();
+    var type = element.type ? element.type.toLowerCase() : '';
+    
+    if (tagName === 'select') return 'dropdown';
+    if (tagName === 'textarea') return 'text';
+    if (type === 'radio') {
+      var radioGroup = document.querySelectorAll('input[name="' + element.name + '"][type="radio"]');
+      return radioGroup.length > 1 ? 'radiogroup' : 'radiobutton';
+    }
+    if (type === 'checkbox') return 'checkbox';
+    if (type === 'email') return 'email';
+    if (type === 'tel') return 'tel';
+    if (type === 'number') return 'number';
+    if (type === 'text' || type === '') return 'text';
+    
+    return type;
+  }
+  
+  function trackFormStart(formElement) {
+    var formId = formElement.id || formElement.name || 'unnamed-form';
+    var formName = formElement.name || formElement.getAttribute('data-form-name') || formElement.id || 'Unnamed Form';
+    
+    if (!formStartedTracker.has(formId)) {
+      formStartedTracker.add(formId);
+      
+      window.dataLayer.push({
+        'event': 'form_start',
+        'form_id': formId,
+        'form_name': formName,
+        'form_url': window.location.href,
+        'timestamp': new Date().toISOString()
+      });
+      
+      console.log('Measuremate: form_start tracked for', formId);
+      logToDebug('form_start', formId);
+    }
+  }
+  
+  function trackFieldFocus(event) {
+    var element = event.target;
+    var formElement = element.closest('form');
+    
+    if (!formElement) return;
+    
+    trackFormStart(formElement);
+    
+    var formId = formElement.id || formElement.name || 'unnamed-form';
+    var formName = formElement.name || formElement.getAttribute('data-form-name') || formElement.id || 'Unnamed Form';
+    
+    window.dataLayer.push({
+      'event': 'form_field_focus',
+      'form_id': formId,
+      'form_name': formName,
+      'form_field_name': element.name || element.id || 'unnamed-field',
+      'form_field_type': getFieldType(element),
+      'form_field_label': element.getAttribute('placeholder') || element.getAttribute('aria-label') || element.getAttribute('label') || '',
+      'timestamp': new Date().toISOString()
+    });
+    
+    console.log('Measuremate: form_field_focus tracked for', element.name);
+    logToDebug('form_field_focus', element.name);
+  }
+  
+  function trackFieldBlur(event) {
+    var element = event.target;
+    var formElement = element.closest('form');
+    
+    if (!formElement) return;
+    
+    var hasValue = element.value && element.value.trim().length > 0;
+    var formId = formElement.id || formElement.name || 'unnamed-form';
+    var formName = formElement.name || formElement.getAttribute('data-form-name') || formElement.id || 'Unnamed Form';
+    
+    window.dataLayer.push({
+      'event': 'form_field_blur',
+      'form_id': formId,
+      'form_name': formName,
+      'form_field_name': element.name || element.id || 'unnamed-field',
+      'form_field_type': getFieldType(element),
+      'form_field_filled': hasValue,
+      'form_field_value_length': element.value ? element.value.length : 0,
+      'timestamp': new Date().toISOString()
+    });
+    
+    console.log('Measuremate: form_field_blur tracked for', element.name);
+    logToDebug('form_field_blur', element.name);
+  }
+  
+  function trackFormSubmit(event) {
+    var formElement = event.target;
+    var filledFields = [];
+    var emptyFields = [];
+    var fieldNames = [];
+    
+    var allFields = formElement.querySelectorAll('input:not([type="submit"]):not([type="button"]), select, textarea');
+    allFields.forEach(function(field) {
+      var fieldName = field.name || field.id || 'unnamed-field';
+      fieldNames.push(fieldName);
+      
+      if (field.value && field.value.toString().trim().length > 0) {
+        filledFields.push(fieldName);
+      } else {
+        emptyFields.push(fieldName);
+      }
+    });
+    
+    var formId = formElement.id || formElement.name || 'unnamed-form';
+    var formName = formElement.name || formElement.getAttribute('data-form-name') || formElement.id || 'Unnamed Form';
+    
+    window.dataLayer.push({
+      'event': 'form_submit',
+      'form_id': formId,
+      'form_name': formName,
+      'form_fields_total': allFields.length,
+      'form_fields_filled': filledFields.length,
+      'form_fields_empty': emptyFields.length,
+      'form_field_names': fieldNames.join(','),
+      'form_url': window.location.href,
+      'timestamp': new Date().toISOString()
+    });
+    
+    console.log('Measuremate: form_submit tracked for', formId);
+    logToDebug('form_submit', formId);
+  }
+  
+  function initFormTracking() {
+    var forms = document.querySelectorAll('form');
+    
+    forms.forEach(function(form) {
+      var fields = form.querySelectorAll('input:not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea');
+      fields.forEach(function(field) {
+        field.addEventListener('focus', trackFieldFocus, true);
+        field.addEventListener('blur', trackFieldBlur, true);
+      });
+      
+      form.addEventListener('submit', trackFormSubmit, true);
+    });
+    
+    console.log('Measuremate: Form tracking initialized for', forms.length, 'form(s)');
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFormTracking);
+  } else {
+    initFormTracking();
+  }
+  
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.addedNodes.length) {
+        mutation.addedNodes.forEach(function(node) {
+          if (node.nodeType === 1 && (node.tagName === 'FORM' || node.querySelector('form'))) {
+            setTimeout(initFormTracking, 100);
+          }
+        });
+      }
+    });
+  });
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+})();
     </script>
 </body>
 </html>
