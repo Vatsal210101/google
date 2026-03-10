@@ -303,6 +303,60 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     childList: true,
     subtree: true
   });
+  
+  // Track trigger creation
+  function trackTriggerCreated(triggerName, triggerType) {
+    window.dataLayer.push({
+      'event': 'gtm_trigger_created',
+      'trigger_name': triggerName,
+      'trigger_type': triggerType,
+      'timestamp': new Date().toISOString()
+    });
+    console.log('Measuremate: trigger_created -', triggerName);
+    logToDebug('gtm_trigger_created', triggerName + ' (' + triggerType + ')');
+  }
+  
+  // Track tag creation and firing
+  function trackTagCreated(tagName, tagType) {
+    window.dataLayer.push({
+      'event': 'gtm_tag_created',
+      'tag_name': tagName,
+      'tag_type': tagType,
+      'timestamp': new Date().toISOString()
+    });
+    console.log('Measuremate: tag_created -', tagName);
+    logToDebug('gtm_tag_created', tagName + ' (' + tagType + ')');
+  }
+  
+  function trackTagFired(tagName, eventName) {
+    window.dataLayer.push({
+      'event': 'gtm_tag_fired',
+      'tag_name': tagName,
+      'triggered_by': eventName,
+      'timestamp': new Date().toISOString()
+    });
+    console.log('Measuremate: tag_fired -', tagName, 'on', eventName);
+    logToDebug('gtm_tag_fired', tagName + ' → ' + eventName);
+  }
+  
+  // Announce trigger and tag creation
+  trackTriggerCreated('Measuremate - Trigger - Form Tracking', 'pageview');
+  trackTagCreated('Measuremate - Tag - Form Tracking', 'html');
+  
+  // Monitor dataLayer for events and track tag firing
+  var originalPush = window.dataLayer.push;
+  var trackedEvents = new Set();
+  
+  window.dataLayer.push = function() {
+    var args = Array.prototype.slice.call(arguments);
+    args.forEach(function(obj) {
+      if (obj && obj.event && !trackedEvents.has(obj.event)) {
+        trackedEvents.add(obj.event);
+        trackTagFired('Measuremate - Tag - Form Tracking', obj.event);
+      }
+    });
+    return originalPush.apply(window.dataLayer, arguments);
+  };
 })();
     </script>
 </body>
