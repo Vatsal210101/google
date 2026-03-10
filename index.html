@@ -43,12 +43,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-    <!-- Debug Panel -->
-    <div style="position: fixed; top: 10px; right: 10px; background: #000; color: #0f0; padding: 15px; border-radius: 5px; max-width: 300px; max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 11px; z-index: 9999;">
-        <div style="color: #fff; font-weight: bold; margin-bottom: 10px;">DataLayer Events:</div>
-        <div id="debugLog"></div>
-    </div>
-
     <div class="container">
         <h1>Registration Form</h1>
         <form id="registrationForm" onsubmit="handleSubmit(event)">
@@ -127,18 +121,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   window.dataLayer = window.dataLayer || [];
   var formStartedTracker = new Set();
   
-  // Debug logger
-  function logToDebug(eventName, detail) {
-    var debugLog = document.getElementById('debugLog');
-    if (debugLog) {
-      var time = new Date().toLocaleTimeString();
-      var entry = document.createElement('div');
-      entry.style.marginBottom = '5px';
-      entry.innerHTML = '<span style="color: #0ff;">' + time + '</span> - <span style="color: #ff0;">' + eventName + '</span>: ' + detail;
-      debugLog.insertBefore(entry, debugLog.firstChild);
-    }
-  }
-  
   function getFieldType(element) {
     var tagName = element.tagName.toLowerCase();
     var type = element.type ? element.type.toLowerCase() : '';
@@ -174,7 +156,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       
       console.log('Measuremate: form_start tracked for', formId);
-      logToDebug('form_start', formId);
     }
   }
   
@@ -200,7 +181,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
     
     console.log('Measuremate: form_field_focus tracked for', element.name);
-    logToDebug('form_field_focus', element.name);
   }
   
   function trackFieldBlur(event) {
@@ -225,7 +205,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
     
     console.log('Measuremate: form_field_blur tracked for', element.name);
-    logToDebug('form_field_blur', element.name);
   }
   
   function trackFormSubmit(event) {
@@ -262,7 +241,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
     
     console.log('Measuremate: form_submit tracked for', formId);
-    logToDebug('form_submit', formId);
   }
   
   function initFormTracking() {
