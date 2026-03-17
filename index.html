@@ -1,286 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Analytics Study Site</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Tracking Final Test</title>
 
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
+<style>
+body { font-family: Arial; background:#f5f5f5; padding:30px; }
+.container { background:white; padding:20px; max-width:600px; margin:auto; }
+input, select { width:100%; padding:10px; margin-bottom:10px; }
+button { padding:10px; width:100%; background:#667eea; color:white; border:none; }
+#eventLog { font-size:12px; max-height:150px; overflow:auto; margin-top:10px; }
+</style>
 
-    .container {
-      background: white;
-      border-radius: 10px;
-      padding: 40px;
-      max-width: 600px;
-      width: 100%;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    }
+<!-- GTM -->
+<script>
+(function(w,d,s,l,i){w[l]=w[l]||[];
+w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-P4M55FSK');
+</script>
 
-    h1 {
-      color: #333;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      color: #333;
-      font-weight: bold;
-      margin-bottom: 6px;
-      font-size: 14px;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-
-    input:focus,
-    select:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 4px rgba(102, 126, 234, 0.3);
-    }
-
-    .policy-box {
-      background: #f8f9fa;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      padding: 15px;
-      margin-bottom: 10px;
-      font-size: 13px;
-      color: #555;
-      line-height: 1.6;
-      max-height: 150px;
-      overflow-y: auto;
-    }
-
-    .radio-group {
-      display: flex;
-      gap: 20px;
-      margin-top: 8px;
-    }
-
-    .radio-group label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: normal;
-      cursor: pointer;
-    }
-
-    .submit-btn {
-      background: #667eea;
-      color: white;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      width: 100%;
-      transition: background 0.3s;
-      margin-top: 10px;
-    }
-
-    .submit-btn:hover {
-      background: #5568d3;
-    }
-
-    .submit-btn:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-    }
-  </style>
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-P4M55FSK');</script>
-  <!-- End Google Tag Manager -->
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BF7Z4B7686"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-BF7Z4B7686');
-  </script>
 </head>
 
 <body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P4M55FSK" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
 
-  <div class="container">
-    <h1>Registration Form</h1>
-    <form id="registrationForm" onsubmit="handleSubmit(event)">
+<noscript>
+<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P4M55FSK"
+height="0" width="0" style="display:none"></iframe>
+</noscript>
 
-      <div class="form-group">
-        <label for="full_name">Full Name</label>
-        <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
-      </div>
+<div class="container">
+<h2>Form Tracking Test</h2>
 
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email address" required>
-      </div>
+<form id="registrationForm">
 
-      <div class="form-group">
-        <label for="phone_number">Phone Number</label>
-        <input type="tel" id="phone_number" name="phone_number" placeholder="Enter your phone number" required>
-      </div>
+<input type="text" name="full_name" placeholder="Full Name" required>
+<input type="email" name="email" placeholder="Email" required>
+<input type="tel" name="phone" placeholder="Phone" required>
 
-      <div class="form-group">
-        <label for="occupation">Occupation</label>
-        <select id="occupation" name="occupation" required>
-          <option value="" disabled selected>Select your occupation</option>
-          <option value="student">Student</option>
-          <option value="software_developer">Software Developer</option>
-          <option value="designer">Designer</option>
-          <option value="marketing_professional">Marketing Professional</option>
-          <option value="data_analyst">Data Analyst</option>
-          <option value="business_owner">Business Owner</option>
-          <option value="teacher">Teacher</option>
-          <option value="healthcare_professional">Healthcare Professional</option>
-          <option value="freelancer">Freelancer</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
+<select name="occupation">
+<option value="">Select Occupation</option>
+<option>Student</option>
+<option>Developer</option>
+</select>
 
-      <div class="form-group">
-        <div class="policy-box">
-          <strong>Terms &amp; Conditions and Privacy Policy</strong><br><br>
-          By submitting this form, you agree to allow us to collect and process your personal information (name, email,
-          phone number, and occupation) for the purpose of registration and communication. Your data will be stored
-          securely and will not be shared with third parties without your consent. You may request deletion of your data
-          at any time by contacting us. We reserve the right to send you updates and notifications related to your
-          registration. This site uses Google Analytics to collect anonymized usage data to improve our services.
-        </div>
-        <label>Do you accept the Terms &amp; Conditions and Privacy Policy?</label>
-        <div class="radio-group">
-          <label>
-            <input type="radio" id="policy_accept" name="policy_agreement" value="accept" required>
-            I Accept
-          </label>
-          <label>
-            <input type="radio" id="policy_reject" name="policy_agreement" value="reject">
-            I Reject
-          </label>
-        </div>
-      </div>
+<button type="submit">Submit</button>
+</form>
 
-      <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
-    </form>
-  </div>
+<!-- Debug Panel -->
+<div style="border:1px solid #ccc; padding:10px; margin-top:20px;">
+<h3>🔍 Debug Panel</h3>
+<div id="eventLog"></div>
+</div>
+</div>
 
-  <script>
-    function handleSubmit(event) {
-      event.preventDefault();
-      const policyValue = document.querySelector('input[name="policy_agreement"]:checked');
-      if (policyValue && policyValue.value === 'reject') {
-        alert('You must accept the Terms & Conditions and Privacy Policy to submit this form.');
-        return;
-      }
-      alert('Form submitted successfully!');
+<script>
+(function(){
+
+  window.dataLayer = window.dataLayer || [];
+  let formStarted = new Set();
+
+  function logEvent(name, data){
+    console.log("🔥", name, data);
+
+    const box = document.getElementById("eventLog");
+    if(box){
+      const p = document.createElement("p");
+      p.innerText = name + " → " + JSON.stringify(data);
+      box.appendChild(p);
     }
-  </script>
+  }
 
-  <!-- Measuremate Form Tracking Script -->
-  <!-- ✅ Simple Form Tracking Script (Matches your backend logic) -->
-  <script>
-    (function () {
+  function getFieldType(el){
+    return el.type || el.tagName.toLowerCase();
+  }
 
-      window.dataLayer = window.dataLayer || [];
+  function trackFormStart(form){
+    const formId = form.id || "unknown";
 
-      function logEvent(eventName, data) {
-        console.log("🔥 Event Fired:", eventName, data);
+    if(!formStarted.has(formId)){
+      formStarted.add(formId);
 
-        // Show on UI (for testing)
-        const logBox = document.getElementById("eventLog");
-        if (logBox) {
-          const p = document.createElement("p");
-          p.innerText = eventName + " → " + JSON.stringify(data);
-          logBox.appendChild(p);
-        }
-      }
+      const data = {
+        event: "form_start",
+        form_id: formId,
+        form_name: form.name || formId
+      };
 
-      // Track focus
-      document.addEventListener("focus", function (e) {
-        if (e.target.closest("form")) {
-          const data = {
-            event: "form_field_focus",
-            field: e.target.name || e.target.id
-          };
+      dataLayer.push(data);
+      logEvent("form_start", data);
+    }
+  }
 
-          window.dataLayer.push(data);
-          logEvent("form_field_focus", data);
-        }
-      }, true);
+  // Focus
+  document.addEventListener("focus", function(e){
+    const form = e.target.closest("form");
+    if(!form) return;
 
-      // Track blur
-      document.addEventListener("blur", function (e) {
-        if (e.target.closest("form")) {
-          const data = {
-            event: "form_field_blur",
-            field: e.target.name || e.target.id
-          };
+    trackFormStart(form);
 
-          window.dataLayer.push(data);
-          logEvent("form_field_blur", data);
-        }
-      }, true);
+    const data = {
+      event: "form_field_focus",
+      form_id: form.id || "unknown",
+      form_name: form.name || form.id,
+      form_field_name: e.target.name || e.target.id,
+      form_field_type: getFieldType(e.target)
+    };
 
-      // Track submit
-      document.addEventListener("submit", function (e) {
-        const form = e.target;
+    dataLayer.push(data);
+    logEvent("form_field_focus", data);
 
-        const data = {
-          event: "form_submit",
-          form_id: form.id || "unknown"
-        };
+  }, true);
 
-        window.dataLayer.push(data);
-        logEvent("form_submit", data);
-      });
+  // Blur
+  document.addEventListener("blur", function(e){
+    const form = e.target.closest("form");
+    if(!form) return;
 
-    })();
-  </script>
+    const data = {
+      event: "form_field_blur",
+      form_id: form.id || "unknown",
+      form_name: form.name || form.id,
+      form_field_name: e.target.name || e.target.id,
+      form_field_type: getFieldType(e.target)
+    };
+
+    dataLayer.push(data);
+    logEvent("form_field_blur", data);
+
+  }, true);
+
+  // Submit
+  document.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const form = e.target;
+
+    const fields = form.querySelectorAll("input, select, textarea");
+
+    let filled = 0;
+
+    fields.forEach(f => {
+      if(f.value && f.value.trim() !== "") filled++;
+    });
+
+    const data = {
+      event: "form_submit",
+      form_id: form.id || "unknown",
+      form_name: form.name || form.id,
+      total_fields: fields.length,
+      filled_fields: filled
+    };
+
+    dataLayer.push(data);
+    logEvent("form_submit", data);
+
+    alert("Form Submitted");
+  });
+
+})();
+</script>
+
 </body>
-
 </html>
-
 
 
 
